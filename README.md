@@ -1,14 +1,22 @@
-# project-anvil-api project
+# project-anvil-api
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+Reactive RESTful API built on Quarkus and Vert.x
 
-If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
+## Developing the application
 
-## Running the application in dev mode
+You'll require a local PostgreSQL database: 
 
-You can run your application in dev mode that enables live coding using:
+```sh
+sudo podman run --ulimit memlock=-1:-1 -it --rm=true --memory-swappiness=0 --name quarkus_test -e POSTGRES_USER=quarkus_test -e POSTGRES_PASSWORD=quarkus_test -e POSTGRES_DB=quarkus_test -p 5432:5432 postgres:10.5
 ```
-./mvnw quarkus:dev
+You can then run the application:
+```sh
+./mvnw compile quarkus:dev
+```
+Test that the API is working:
+```sh
+curl http://localhost:8080/api/questions
+[{"answer":"I mean...","id":3,"question":"Why is beer better than water"},{"answer":"hunter2","id":2,"question":"What is my password"},{"answer":"42","id":1,"question":"What is the meaning of life"}][shane@helix project-anvil-api]
 ```
 
 ## Packaging and running the application
