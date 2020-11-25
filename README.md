@@ -33,6 +33,8 @@ You can create a native executable using: `./mvnw package -Pnative`.
 
 Or, if you don't have GraalVM installed, you can run the native executable build in a container using: `./mvnw package -Pnative -Dquarkus.native.container-build=true`.
 
+Podman: `./mvnw package -Pnative -Dquarkus.native.container-build=true -Dquarkus.native.container-runtime=podman`
+
 You can then execute your native executable with: `./target/project-anvil-api-0.1.0-runner`
 
 If you want to learn more about building native executables, please consult https://quarkus.io/guides/building-native-image.
