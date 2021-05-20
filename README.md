@@ -1,4 +1,4 @@
-# project-anvil-api
+# Questions API demo
 
 Reactive RESTful API built on Quarkus and Vert.x
 
