@@ -22,6 +22,9 @@ import io.vertx.mutiny.sqlclient.Row;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Tags;
+
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 @Path("/api/questions/")
@@ -31,6 +34,9 @@ public class QuestionResource {
 
     @Inject
     io.vertx.mutiny.pgclient.PgPool client;
+
+    @Inject
+    MeterRegistry registry;
 
     @Inject
     @ConfigProperty(name = "anvil.schema.create", defaultValue = "true")
@@ -49,9 +55,9 @@ public class QuestionResource {
                 .flatMap(r -> client.query("CREATE OR REPLACE FUNCTION trigger_set_timestamp() RETURNS TRIGGER AS $$ BEGIN NEW.updated_at = NOW(); RETURN NEW; END; $$ LANGUAGE plpgsql").execute())
                 .flatMap(r -> client.query("CREATE TABLE questions (id SERIAL PRIMARY KEY, question TEXT NOT NULL, answer TEXT, created_at TIMESTAMPTZ NOT NULL DEFAULT NOW())").execute())
                 .flatMap(r -> client.query("CREATE TRIGGER set_timestamp BEFORE UPDATE ON questions FOR EACH ROW EXECUTE PROCEDURE trigger_set_timestamp()").execute())
-                .flatMap(r -> client.query("INSERT INTO questions (question,answer) VALUES ('What is the meaning of life','42')").execute())
-                .flatMap(r -> client.query("INSERT INTO questions (question,answer) VALUES ('What is my password','hunter2')").execute())
-                .flatMap(r -> client.query("INSERT INTO questions (question,answer) VALUES ('Why is beer better than water','I mean...')").execute())
+                .flatMap(r -> client.query("INSERT INTO questions (question,answer) VALUES ('How do I create a Jenkins pipeline on OpenShift?','')").execute())
+                .flatMap(r -> client.query("INSERT INTO questions (question,answer) VALUES ('Where can I access hands-on OpenShift labs?','')").execute())
+                .flatMap(r -> client.query("INSERT INTO questions (question,answer) VALUES ('How can I find out more about the OpenShift Compliance Operator?','')").execute())
                 .await().indefinitely();
     }
 
